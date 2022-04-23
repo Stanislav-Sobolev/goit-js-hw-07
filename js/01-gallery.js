@@ -1,7 +1,8 @@
 import { galleryItems } from './gallery-items.js';
+
 // Change code below this line
 
-const galleryContainer = document.querySelector(".gallery");
+const galleryContainer = document.querySelector("div.gallery");
 
 
 const previewGalleryList = galleryItems.map( ({preview, original, description}) => {
@@ -18,21 +19,32 @@ const previewGalleryList = galleryItems.map( ({preview, original, description}) 
 </div>`
 }).join("");
 
-console.log(previewGalleryList);
-
 galleryContainer.insertAdjacentHTML("beforeend", previewGalleryList)
 
+galleryContainer.addEventListener("click", getBigImageUrl)
 
-// import * as basicLightbox from 'basiclightbox'
+function getBigImageUrl (event) {
+  event.preventDefault()
+if(event.target.nodeName !== "IMG") {
+  return;
+}
 
-// const instance = basicLightbox.create(`
-//     <img src="${galleryItems[0].original}" width="800" height="600">
-// `)
+const instance = basicLightbox.create(`
+    <img src="${event.target.dataset.source}">
+`)
 
-// instance.show()
-
-
-
-console.log(galleryItems);
+instance.show();
 
 
+window.document.addEventListener("keydown", setModalListener);
+
+function setModalListener (e) {
+  console.dir(e.code)
+  if(e.code === "Escape"){
+    instance.close()
+    removeCloseListener()
+}
+
+function removeCloseListener () {
+  window.document.removeEventListener("keydown", setModalListener)
+}}}
